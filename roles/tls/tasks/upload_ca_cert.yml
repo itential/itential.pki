@@ -1,0 +1,24 @@
+# Copyright (c) 2025, Itential, Inc
+# GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+# - name: Check to see if the remote CA cert directory already exists
+#   ansible.builtin.stat:
+#     path: "{{ tls_remote_ca_cert_dir }}"
+#   register: stat_result
+
+# - name: Ensure remote cert directory exists (if not already present)
+#   ansible.builtin.file:
+#     path: "{{ tls_remote_ca_cert_dir }}"
+#     state: directory
+#     owner: "{{ tls_ca_cert_user }}"
+#     group: "{{ tls_ca_cert_group }}"
+#     mode: '0755'
+#   when: not stat_result.stat.exists
+
+- name: Copy CA certificate
+  ansible.builtin.copy:
+    src: "{{ tls_local_ca_cert_file }}"
+    dest: "{{ tls_remote_ca_cert_file }}"
+    owner: "{{ tls_ca_cert_user }}"
+    group: "{{ tls_ca_cert_group }}"
+    mode: '0444'

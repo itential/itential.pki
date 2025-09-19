@@ -1,0 +1,45 @@
+# Copyright (c) 2025, Itential, Inc
+# GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+- name: Generate private key
+  community.crypto.openssl_privatekey:
+    path: "{{ tls_local_cert_dir }}/{{ tls_remote_key_filename }}"
+    size: 2048
+    type: RSA
+    mode: '0600'
+  delegate_to: localhost
+
+- name: Generate CSR with SANs
+  community.crypto.openssl_csr:
+    path: "{{ tls_local_cert_dir }}/{{ tls_remote_csr_filename }}"
+    privatekey_path: "{{ tls_local_cert_dir }}/{{ tls_remote_key_filename }}"
+    common_name: "{{ tls_csr_common_name }}"
+    country_name: "{{ tls_csr_country_name }}"
+    organization_name: "{{ tls_csr_organization_name }}"
+    organizational_unit_name: "{{ tls_csr_organizational_unit_name }}"
+    state_or_province_name: "{{ tls_csr_state_or_province_name }}"
+    locality_name: "{{ tls_csr_locality_name }}"
+    subject_alt_name:
+      - "DNS:{{ inventory_hostname }}"
+      - "DNS:{{ ansible_fqdn | default(inventory_hostname) }}"
+      - "IP:{{ ansible_default_ipv4.address | default('127.0.0.1') }}"
+  delegate_to: localhost
+
+- name: Generate certificate with SANs (selfsigned)
+  community.crypto.x509_certificate:
+    path: "{{ tls_local_cert_dir }}/{{ tls_remote_cert_filename }}"
+    csr_path: "{{ tls_local_cert_dir }}/{{ tls_remote_csr_filename }}"
+    privatekey_path: "{{ tls_local_cert_dir }}/{{ tls_remote_key_filename }}"
+    provider: selfsigned
+  when: not tls_own_ca | bool
+  delegate_to: localhost
+
+- name: Generate certificate with SANs (ownca)
+  community.crypto.x509_certificate:
+    path: "{{ tls_local_cert_dir }}/{{ tls_remote_cert_filename }}"
+    csr_path: "{{ tls_local_cert_dir }}/{{ tls_remote_csr_filename }}"
+    provider: ownca
+    ownca_path: "{{ tls_local_cert_dir }}/{{ tls_remote_ca_cert_filename }}"
+    ownca_privatekey_path: "{{ tls_local_cert_dir }}/{{ tls_remote_ca_key_filename }}"
+  when: tls_own_ca | bool
+  delegate_to: localhost

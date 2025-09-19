@@ -1,0 +1,12 @@
+# Copyright (c) 2025, Itential, Inc
+# GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+- name: Upload multi-domain cert to all hosts
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Upload multi-domain cert to all hosts
+      ansible.builtin.import_role:
+        name: itential.tls.tls
+        tasks_from: upload_multi_domain_cert
