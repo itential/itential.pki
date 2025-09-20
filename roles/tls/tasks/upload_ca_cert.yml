@@ -4,7 +4,7 @@
 - name: Copy CA certificate
   ansible.builtin.copy:
     src: "{{ tls_local_certs_dir }}/{{ tls_local_ca_cert_filename }}"
-    dest: "{{ tls_remote_ca_cert_dir }}/{{ tls_remote_ca_cert_filename }}"
+    dest: "{{ tls_remote_ca_certs_dir }}/{{ tls_remote_ca_cert_filename }}"
     owner: root
     group: root
     mode: '0444'

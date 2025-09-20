@@ -1,18 +1,13 @@
 # Copyright (c) 2025, Itential, Inc
 # GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
 ---
-# The key, certificate and CSR suffix defaults
-tls_key_suffix: .key
-tls_cert_suffix: .crt
-tls_csr_suffix: .csr
-
 # The local certificate directory must be defined in the inventory
 tls_local_certs_dir:
 
 # The remote CA, certificate and key directories
-tls_remote_ca_cert_dir: /etc/pki/ca-trust/source/anchors
-tls_remote_cert_dir: /etc/pki/tls/certs
-tls_remote_key_dir: /etc/pki/tls/private
+tls_remote_ca_certs_dir: /etc/pki/ca-trust/source/anchors
+tls_remote_certs_dir: /etc/pki/tls/certs
+tls_remote_keys_dir: /etc/pki/tls/private
 
 # SSL common defaults
 tls_own_ca: true
@@ -28,27 +23,32 @@ tls_csr_locality_name: Atlanta
 # The CA defaults
 tls_ca_common_name: Itential CA
 tls_ca_organziation_name: Itential
-tls_local_ca_basename: itentialCA
 
-# CA file defaults
-tls_local_ca_key_filename: "{{ tls_local_ca_basename }}{{ tls_key_suffix }}"
-tls_local_ca_cert_filename: "{{ tls_local_ca_basename }}{{ tls_cert_suffix }}"
-tls_local_ca_csr_filename: "{{ tls_local_ca_basename }}{{ tls_csr_suffix }}"
-tls_remote_ca_key_filename: "{{ tls_local_ca_basename }}{{ tls_key_suffix }}"
-tls_remote_ca_cert_filename: "{{ tls_local_ca_basename }}{{ tls_cert_suffix }}"
+# The key, certificate and CSR suffix defaults
+tls_key_suffix: .key
+tls_cert_suffix: .crt
+tls_csr_suffix: .csr
 
-# Multi-Domain certficate and key file defaults
-tls_md_filename_root: itential
-tls_md_local_key_filename: "{{ tls_md_filename_root }}{{ tls_key_suffix }}"
-tls_md_local_csr_filename: "{{ tls_md_filename_root }}{{ tls_csr_suffix }}"
-tls_md_local_cert_filename: "{{ tls_md_filename_root }}{{ tls_cert_suffix }}"
+# The CA file defaults
+tls_ca_filename: itentialCA
+tls_local_ca_key_filename: "{{ tls_ca_filename }}{{ tls_key_suffix }}"
+tls_local_ca_cert_filename: "{{ tls_ca_filename }}{{ tls_cert_suffix }}"
+tls_local_ca_csr_filename: "{{ tls_ca_filename }}{{ tls_csr_suffix }}"
+tls_remote_ca_key_filename: "{{ tls_local_ca_key_filename }}"
+tls_remote_ca_cert_filename: "{{ tls_local_ca_cert_filename }}"
+
+# The multi-domain certficate and key file defaults
+tls_md_cert_filename: itential
+tls_md_local_key_filename: "{{ tls_md_cert_filename }}{{ tls_key_suffix }}"
+tls_md_local_csr_filename: "{{ tls_md_cert_filename }}{{ tls_csr_suffix }}"
+tls_md_local_cert_filename: "{{ tls_md_cert_filename }}{{ tls_cert_suffix }}"
 tls_md_remote_key_filename: "{{ tls_md_local_key_filename }}"
 tls_md_remote_cert_filename: "{{ tls_md_local_cert_filename }}"
 
-# The key and certificate target node default locations
-tls_local_key_filename: "{{ inventory_hostname }}{{ tls_key_suffix }}"
-tls_local_csr_filename: "{{ inventory_hostname }}{{ tls_csr_suffix }}"
-tls_local_cert_filename: "{{ inventory_hostname }}{{ tls_cert_suffix }}"
-tls_remote_key_filename: "{{ inventory_hostname }}{{ tls_key_suffix }}"
-tls_remote_csr_filename: "{{ inventory_hostname }}{{ tls_csr_suffix }}"
-tls_remote_cert_filename: "{{ inventory_hostname }}{{ tls_cert_suffix }}"
+# The certificate and key file defaults
+tls_cert_filename: "{{ inventory_hostname }}"
+tls_local_key_filename: "{{ tls_cert_filename }}{{ tls_key_suffix }}"
+tls_local_csr_filename: "{{ tls_cert_filename }}{{ tls_csr_suffix }}"
+tls_local_cert_filename: "{{ tls_cert_filename }}{{ tls_cert_suffix }}"
+tls_remote_key_filename: "{{ tls_local_key_filename }}"
+tls_remote_cert_filename: "{{ tls_local_cert_filename }}"
