@@ -3,7 +3,7 @@
 ---
 - name: Generate private key
   community.crypto.openssl_privatekey:
-    path: "{{ tls_local_cert_dir }}/{{ tls_remote_key_filename }}"
+    path: "{{ tls_local_certs_dir }}/{{ tls_local_key_filename }}"
     size: 2048
     type: RSA
     mode: '0600'
@@ -11,8 +11,8 @@
 
 - name: Generate CSR with SANs
   community.crypto.openssl_csr:
-    path: "{{ tls_local_cert_dir }}/{{ tls_remote_csr_filename }}"
-    privatekey_path: "{{ tls_local_cert_dir }}/{{ tls_remote_key_filename }}"
+    path: "{{ tls_local_certs_dir }}/{{ tls_local_csr_filename }}"
+    privatekey_path: "{{ tls_local_certs_dir }}/{{ tls_local_key_filename }}"
     common_name: "{{ tls_csr_common_name }}"
     country_name: "{{ tls_csr_country_name }}"
     organization_name: "{{ tls_csr_organization_name }}"
@@ -27,19 +27,19 @@
 
 - name: Generate certificate with SANs (selfsigned)
   community.crypto.x509_certificate:
-    path: "{{ tls_local_cert_dir }}/{{ tls_remote_cert_filename }}"
-    csr_path: "{{ tls_local_cert_dir }}/{{ tls_remote_csr_filename }}"
-    privatekey_path: "{{ tls_local_cert_dir }}/{{ tls_remote_key_filename }}"
+    path: "{{ tls_local_certs_dir }}/{{ tls_local_cert_filename }}"
+    csr_path: "{{ tls_local_certs_dir }}/{{ tls_local_csr_filename }}"
+    privatekey_path: "{{ tls_local_certs_dir }}/{{ tls_local_key_filename }}"
     provider: selfsigned
   when: not tls_own_ca | bool
   delegate_to: localhost
 
 - name: Generate certificate with SANs (ownca)
   community.crypto.x509_certificate:
-    path: "{{ tls_local_cert_dir }}/{{ tls_remote_cert_filename }}"
-    csr_path: "{{ tls_local_cert_dir }}/{{ tls_remote_csr_filename }}"
+    path: "{{ tls_local_certs_dir }}/{{ tls_local_cert_filename }}"
+    csr_path: "{{ tls_local_certs_dir }}/{{ tls_local_csr_filename }}"
     provider: ownca
-    ownca_path: "{{ tls_local_cert_dir }}/{{ tls_remote_ca_cert_filename }}"
-    ownca_privatekey_path: "{{ tls_local_cert_dir }}/{{ tls_remote_ca_key_filename }}"
+    ownca_path: "{{ tls_local_certs_dir }}/{{ tls_local_ca_cert_filename }}"
+    ownca_privatekey_path: "{{ tls_local_certs_dir }}/{{ tls_local_ca_key_filename }}"
   when: tls_own_ca | bool
   delegate_to: localhost

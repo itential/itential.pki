@@ -1,35 +1,21 @@
 # Copyright (c) 2025, Itential, Inc
 # GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
 ---
-# User/group info
-tls_ca_cert_user: root
-tls_ca_cert_group: root
-tls_cert_user: itential
-tls_cert_group: itential
-
-# The Key, Cert and CSR suffix defaults
+# The key, certificate and CSR suffix defaults
 tls_key_suffix: .key
 tls_cert_suffix: .crt
 tls_csr_suffix: .csr
 
+# The local certificate directory must be defined in the inventory
+tls_local_certs_dir:
+
+# The remote CA, certificate and key directories
+tls_remote_ca_cert_dir: /etc/pki/ca-trust/source/anchors
+tls_remote_cert_dir: /etc/pki/tls/certs
+tls_remote_key_dir: /etc/pki/tls/private
+
 # SSL common defaults
 tls_own_ca: true
-
-# The local certificate directory must be defined in the inventory
-tls_local_cert_dir:
-
-# Multi-Domain defaults
-tls_multi_domain_filename_root: itential
-
-# When generating a Multi-Domain Key and Cert, the CA, Key and Cert are generated
-# on the control node
-
-tls_local_key_filename: "{{ tls_multi_domain_filename_root }}{{ tls_key_suffix }}"
-tls_local_key_file: "{{ tls_local_cert_dir }}/{{ tls_local_key_filename }}"
-tls_local_csr_filename: "{{ tls_multi_domain_filename_root }}{{ tls_csr_suffix }}"
-tls_local_csr_file: "{{ tls_local_cert_dir }}/{{ tls_local_csr_filename }}"
-tls_local_cert_filename: "{{ tls_multi_domain_filename_root }}{{ tls_cert_suffix }}"
-tls_local_cert_file: "{{ tls_local_cert_dir }}/{{ tls_local_cert_filename }}"
 
 # The CSR defaults
 tls_csr_common_name: Itential
@@ -39,33 +25,30 @@ tls_csr_organizational_unit_name: IT
 tls_csr_state_or_province_name: Georgia
 tls_csr_locality_name: Atlanta
 
-# The Key and Cert target node default locations
-tls_remote_key_dir: /etc/pki/tls/private
-tls_remote_cert_dir: /etc/pki/tls/certs
-tls_remote_key_filename: "{{ inventory_hostname }}{{ tls_key_suffix }}"
-tls_remote_key_file: "{{ tls_remote_key_dir }}/{{ tls_remote_key_filename }}"
-tls_remote_csr_filename: "{{ inventory_hostname }}{{ tls_csr_suffix }}"
-tls_remote_csr_file: "{{ tls_remote_key_dir }}/{{ tls_remote_csr_filename }}"
-tls_remote_cert_filename: "{{ inventory_hostname }}{{ tls_cert_suffix }}"
-tls_remote_cert_file: "{{ tls_remote_cert_dir }}/{{ tls_remote_cert_filename }}"
-
 # The CA defaults
 tls_ca_common_name: Itential CA
 tls_ca_organziation_name: Itential
-
-# The CA is generated on localhost
 tls_local_ca_basename: itentialCA
-tls_local_ca_key_filename: "{{ tls_local_ca_basename }}{{ tls_key_suffix }}"
-tls_local_ca_key_file: "{{ tls_local_cert_dir }}/{{ tls_local_ca_key_filename }}"
-tls_local_ca_cert_filename: "{{ tls_local_ca_basename }}{{ tls_cert_suffix }}"
-tls_local_ca_cert_file: "{{ tls_local_cert_dir }}/{{ tls_local_ca_cert_filename }}"
-tls_local_ca_csr_filnename: "{{ tls_local_ca_basename }}{{ tls_csr_suffix }}"
-tls_local_ca_csr_file: "{{ tls_local_cert_dir }}/{{ tls_local_ca_csr_filnename }}"
 
-# The CA target node default location
-tls_remote_ca_cert_dir: /etc/pki/ca-trust/source/anchors
-tls_remote_ca_key_dir: "{{ tls_remote_key_dir }}"
+# CA file defaults
+tls_local_ca_key_filename: "{{ tls_local_ca_basename }}{{ tls_key_suffix }}"
+tls_local_ca_cert_filename: "{{ tls_local_ca_basename }}{{ tls_cert_suffix }}"
+tls_local_ca_csr_filename: "{{ tls_local_ca_basename }}{{ tls_csr_suffix }}"
 tls_remote_ca_key_filename: "{{ tls_local_ca_basename }}{{ tls_key_suffix }}"
-tls_remote_ca_key_file: "{{ tls_remote_ca_key_dir }}/{{ tls_remote_ca_key_filename }}"
 tls_remote_ca_cert_filename: "{{ tls_local_ca_basename }}{{ tls_cert_suffix }}"
-tls_remote_ca_cert_file: "{{ tls_remote_ca_cert_dir }}/{{ tls_remote_ca_cert_filename }}"
+
+# Multi-Domain certficate and key file defaults
+tls_md_filename_root: itential
+tls_md_local_key_filename: "{{ tls_md_filename_root }}{{ tls_key_suffix }}"
+tls_md_local_csr_filename: "{{ tls_md_filename_root }}{{ tls_csr_suffix }}"
+tls_md_local_cert_filename: "{{ tls_md_filename_root }}{{ tls_cert_suffix }}"
+tls_md_remote_key_filename: "{{ tls_md_local_key_filename }}"
+tls_md_remote_cert_filename: "{{ tls_md_local_cert_filename }}"
+
+# The key and certificate target node default locations
+tls_local_key_filename: "{{ inventory_hostname }}{{ tls_key_suffix }}"
+tls_local_csr_filename: "{{ inventory_hostname }}{{ tls_csr_suffix }}"
+tls_local_cert_filename: "{{ inventory_hostname }}{{ tls_cert_suffix }}"
+tls_remote_key_filename: "{{ inventory_hostname }}{{ tls_key_suffix }}"
+tls_remote_csr_filename: "{{ inventory_hostname }}{{ tls_csr_suffix }}"
+tls_remote_cert_filename: "{{ inventory_hostname }}{{ tls_cert_suffix }}"
