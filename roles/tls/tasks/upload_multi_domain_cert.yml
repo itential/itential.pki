@@ -3,16 +3,16 @@
 ---
 - name: Copy private key
   ansible.builtin.copy:
-    src: "{{ tls_local_certs_dir }}/{{ tls_md_local_key_filename }}"
-    dest: "{{ tls_remote_keys_dir }}/{{ tls_md_remote_key_filename }}"
+    src: "{{ tls_pki_md_key_file_src }}"
+    dest: "{{ tls_pki_md_key_file_dest }}"
     owner: root
     group: root
     mode: '0600'
 
 - name: Copy certificate
   ansible.builtin.copy:
-    src: "{{ tls_local_certs_dir }}/{{ tls_md_local_cert_filename }}"
-    dest: "{{ tls_remote_certs_dir }}/{{ tls_md_remote_cert_filename }}"
+    src: "{{ tls_pki_md_cert_file_src }}"
+    dest: "{{ tls_pki_md_cert_file_dest }}"
     owner: root
     group: root
     mode: '0444'

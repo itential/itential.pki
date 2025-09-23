@@ -6,15 +6,15 @@
 # -----------------
 - name: Generate CA private key
   community.crypto.openssl_privatekey:
-    path: "{{ tls_local_certs_dir }}/{{ tls_local_ca_key_filename }}"
+    path: "{{ tls_pki_ca_key_file_src }}"
     size: 4096
     type: RSA
     mode: '0600'
 
 - name: Generate CA CSR with CA extensions
   community.crypto.openssl_csr:
-    path: "{{ tls_local_certs_dir }}/{{ tls_local_ca_csr_filename }}"
-    privatekey_path: "{{ tls_local_certs_dir }}/{{ tls_local_ca_key_filename }}"
+    path: "{{ tls_pki_ca_csr_file_src }}"
+    privatekey_path: "{{ tls_pki_ca_key_file_src }}"
     common_name: "{{ tls_ca_common_name }}"
     basic_constraints:
       - "CA:TRUE"
@@ -24,8 +24,8 @@
 
 - name: Self-sign the CA CSR
   community.crypto.x509_certificate:
-    path: "{{ tls_local_certs_dir }}/{{ tls_local_ca_cert_filename }}"
-    csr_path: "{{ tls_local_certs_dir }}/{{ tls_local_ca_csr_filename }}"
-    privatekey_path: "{{ tls_local_certs_dir }}/{{ tls_local_ca_key_filename }}"
+    path: "{{ tls_pki_ca_cert_file_src }}"
+    csr_path: "{{ tls_pki_ca_csr_file_src }}"
+    privatekey_path: "{{ tls_pki_ca_key_file_src }}"
     provider: selfsigned
     # selfsigned_not_after: "+10y"

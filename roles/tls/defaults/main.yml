@@ -1,18 +1,18 @@
 # Copyright (c) 2025, Itential, Inc
 # GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
 ---
-# The local certificate directory must be defined in the inventory
-tls_local_certs_dir:
+# The source pki directory must be defined in the inventory
+tls_pki_src_dir:
 
-# The remote CA, certificate and key directories
-tls_remote_ca_certs_dir: /etc/pki/ca-trust/source/anchors
-tls_remote_certs_dir: /etc/pki/tls/certs
-tls_remote_keys_dir: /etc/pki/tls/private
+# The destination CA, certificate and key directories
+tls_pki_ca_certs_dir: /etc/pki/ca-trust/source/anchors
+tls_pki_certs_dir: /etc/pki/tls/certs
+tls_pki_keys_dir: /etc/pki/tls/private
 
-# SSL common defaults
+# Whether to use the CA for signing the certificate
 tls_own_ca: true
 
-# The CSR defaults
+# CSR defaults
 tls_csr_common_name: Itential
 tls_csr_country_name: US
 tls_csr_organization_name: Itential
@@ -20,35 +20,66 @@ tls_csr_organizational_unit_name: IT
 tls_csr_state_or_province_name: Georgia
 tls_csr_locality_name: Atlanta
 
-# The CA defaults
+# CA defaults
 tls_ca_common_name: Itential CA
-tls_ca_organziation_name: Itential
 
-# The key, certificate and CSR suffix defaults
-tls_key_suffix: .key
-tls_cert_suffix: .crt
-tls_csr_suffix: .csr
+# Key, certificate and CSR suffix
+tls_pki_key_suffix: .key
+tls_pki_cert_suffix: .crt
+tls_pki_csr_suffix: .csr
 
-# The CA file defaults
-tls_ca_filename: ca
-tls_local_ca_key_filename: "{{ tls_ca_filename }}{{ tls_key_suffix }}"
-tls_local_ca_cert_filename: "{{ tls_ca_filename }}{{ tls_cert_suffix }}"
-tls_local_ca_csr_filename: "{{ tls_ca_filename }}{{ tls_csr_suffix }}"
-tls_remote_ca_key_filename: "{{ tls_local_ca_key_filename }}"
-tls_remote_ca_cert_filename: "{{ tls_local_ca_cert_filename }}"
+#############
+# CA defaults
+#############
+tls_pki_ca_filename: ca
 
-# The multi-domain certficate and key file defaults
-tls_md_cert_filename: itential
-tls_md_local_key_filename: "{{ tls_md_cert_filename }}{{ tls_key_suffix }}"
-tls_md_local_csr_filename: "{{ tls_md_cert_filename }}{{ tls_csr_suffix }}"
-tls_md_local_cert_filename: "{{ tls_md_cert_filename }}{{ tls_cert_suffix }}"
-tls_md_remote_key_filename: "{{ tls_md_local_key_filename }}"
-tls_md_remote_cert_filename: "{{ tls_md_local_cert_filename }}"
+# CA key
+tls_pki_ca_key_file: "{{ tls_pki_ca_filename }}{{ tls_pki_key_suffix }}"
+tls_pki_ca_key_file_src: "{{ tls_pki_src_dir }}/{{ tls_pki_ca_key_file }}"
 
-# The certificate and key file defaults
-tls_cert_filename: "{{ inventory_hostname }}"
-tls_local_key_filename: "{{ tls_cert_filename }}{{ tls_key_suffix }}"
-tls_local_csr_filename: "{{ tls_cert_filename }}{{ tls_csr_suffix }}"
-tls_local_cert_filename: "{{ tls_cert_filename }}{{ tls_cert_suffix }}"
-tls_remote_key_filename: "{{ tls_local_key_filename }}"
-tls_remote_cert_filename: "{{ tls_local_cert_filename }}"
+# CA CSR
+tls_pki_ca_csr_file: "{{ tls_pki_ca_filename }}{{ tls_pki_csr_suffix }}"
+tls_pki_ca_csr_file_src: "{{ tls_pki_src_dir }}/{{ tls_pki_ca_csr_file }}"
+
+# CA certificate
+tls_pki_ca_cert_file: "{{ tls_pki_ca_filename }}{{ tls_pki_cert_suffix }}"
+tls_pki_ca_cert_file_src: "{{ tls_pki_src_dir }}/{{ tls_pki_ca_cert_file }}"
+tls_pki_ca_cert_file_dest: "{{ tls_pki_ca_certs_dir }}/{{ tls_pki_ca_cert_file }}"
+
+###################################
+# Certificate defaults
+###################################
+tls_pki_cert_filename: "{{ inventory_hostname }}"
+
+# Multi-domain key
+tls_pki_key_file: "{{ tls_pki_cert_filename }}{{ tls_pki_key_suffix }}"
+tls_pki_key_file_src: "{{ tls_pki_src_dir }}/{{ tls_pki_key_file }}"
+tls_pki_key_file_dest: "{{ tls_pki_keys_dir }}/{{ tls_pki_key_file }}"
+
+# Multi-domain CSR
+tls_pki_csr_file: "{{ tls_pki_cert_filename }}{{ tls_pki_csr_suffix }}"
+tls_pki_csr_file_src: "{{ tls_pki_src_dir }}/{{ tls_pki_csr_file }}"
+
+# Multi-domain certificate
+tls_pki_cert_file: "{{ tls_pki_cert_filename }}{{ tls_pki_cert_suffix }}"
+tls_pki_cert_file_src: "{{ tls_pki_src_dir }}/{{ tls_pki_cert_file }}"
+tls_pki_cert_file_dest: "{{ tls_pki_cert_dir }}/{{ tls_pki_cert_file }}"
+
+###################################
+# Multi-domain certificate defaults
+###################################
+tls_pki_md_cert_filename: itential
+
+# Multi-domain key
+tls_pki_md_key_file: "{{ tls_pki_md_cert_filename }}{{ tls_pki_key_suffix }}"
+tls_pki_md_key_file_src: "{{ tls_pki_src_dir }}/{{ tls_pki_md_key_file }}"
+tls_pki_md_key_file_dest: "{{ tls_pki_keys_dir }}/{{ tls_pki_md_key_file }}"
+
+# Multi-domain CSR
+tls_pki_md_csr_file: "{{ tls_pki_md_cert_filename }}{{ tls_pki_csr_suffix }}"
+tls_pki_md_csr_file_src: "{{ tls_pki_src_dir }}/{{ tls_pki_md_csr_file }}"
+
+# Multi-domain certificate
+tls_pki_md_cert_file: "{{ tls_pki_md_cert_filename }}{{ tls_pki_cert_suffix }}"
+tls_pki_md_cert_file_src: "{{ tls_pki_src_dir }}/{{ tls_pki_md_cert_file }}"
+tls_pki_md_cert_file_dest: "{{ tls_pki_cert_dir }}/{{ tls_pki_md_cert_file }}"
