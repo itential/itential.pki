@@ -30,7 +30,7 @@ tls_cert_suffix: .crt
 tls_csr_suffix: .csr
 
 # The CA file defaults
-tls_ca_filename: itentialCA
+tls_ca_filename: ca
 tls_local_ca_key_filename: "{{ tls_ca_filename }}{{ tls_key_suffix }}"
 tls_local_ca_cert_filename: "{{ tls_ca_filename }}{{ tls_cert_suffix }}"
 tls_local_ca_csr_filename: "{{ tls_ca_filename }}{{ tls_csr_suffix }}"
