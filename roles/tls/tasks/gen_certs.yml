@@ -1,9 +1,14 @@
 # Copyright (c) 2025, Itential, Inc
 # GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
 ---
+- name: Include tasks to validate variables
+  ansible.builtin.include_tasks:
+    file: validate_vars.yml
+  tags: always
+
 - name: Generate private key
   community.crypto.openssl_privatekey:
-    path: "{{ tls_pki_key_file_src }}"
+    path: "{{ tls_pki_key_file_local }}"
     size: 2048
     type: RSA
     mode: '0600'
@@ -11,8 +16,8 @@
 
 - name: Generate CSR with SANs
   community.crypto.openssl_csr:
-    path: "{{ tls_pki_csr_file_src }}"
-    privatekey_path: "{{ tls_pki_key_file_src }}"
+    path: "{{ tls_pki_csr_file_local }}"
+    privatekey_path: "{{ tls_pki_key_file_local }}"
     common_name: "{{ tls_csr_common_name }}"
     country_name: "{{ tls_csr_country_name }}"
     organization_name: "{{ tls_csr_organization_name }}"
@@ -27,19 +32,19 @@
 
 - name: Generate certificate with SANs (selfsigned)
   community.crypto.x509_certificate:
-    path: "{{ tls_pki_cert_file_src }}"
-    csr_path: "{{ tls_pki_csr_file_src }}"
-    privatekey_path: "{{ tls_pki_key_file_src }}"
+    path: "{{ tls_pki_cert_file_local }}"
+    csr_path: "{{ tls_pki_csr_file_local }}"
+    privatekey_path: "{{ tls_pki_key_file_local }}"
     provider: selfsigned
   when: not tls_own_ca | bool
   delegate_to: localhost
 
 - name: Generate certificate with SANs (ownca)
   community.crypto.x509_certificate:
-    path: "{{ tls_pki_cert_file_src }}"
-    csr_path: "{{ tls_pki_csr_file_src }}"
+    path: "{{ tls_pki_cert_file_local }}"
+    csr_path: "{{ tls_pki_csr_file_local }}"
     provider: ownca
-    ownca_path: "{{ tls_pki_ca_cert_file_src }}"
-    ownca_privatekey_path: "{{ tls_pki_ca_key_file_src }}"
+    ownca_path: "{{ tls_pki_ca_cert_file_local }}"
+    ownca_privatekey_path: "{{ tls_pki_ca_key_file_local }}"
   when: tls_own_ca | bool
   delegate_to: localhost

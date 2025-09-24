@@ -1,0 +1,15 @@
+# Copyright (c) 2025, Itential, Inc
+# GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+- name: Validate local pki directory is defined
+  ansible.builtin.assert:
+    that:
+      - tls_pki_local_dir is defined
+      - tls_pki_local_dir is not none
+    fail_msg: Local pki directory (tls_pki_local_dir) is not defined in the inventory
+
+- name: Ensure local pki directory exists
+  ansible.builtin.file:
+    path: "{{ tls_pki_local_dir }}"
+    state: directory
+    mode: '0755'

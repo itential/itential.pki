@@ -3,7 +3,7 @@
 ---
 - name: Copy private key
   ansible.builtin.copy:
-    src: "{{ tls_pki_key_file_src }}"
+    src: "{{ tls_pki_key_file_local }}"
     dest: "{{ tls_pki_key_file_dest }}"
     owner: root
     group: root
@@ -11,7 +11,7 @@
 
 - name: Copy certificate
   ansible.builtin.copy:
-    src: "{{ tls_pki_cert_file_src }}"
+    src: "{{ tls_pki_cert_file_local }}"
     dest: "{{ tls_pki_cert_file_dest }}"
     owner: root
     group: root

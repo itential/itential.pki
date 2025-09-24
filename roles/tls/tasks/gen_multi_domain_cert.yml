@@ -1,12 +1,6 @@
 # Copyright (c) 2025, Itential, Inc
 # GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
 ---
-- name: Ensure cert directory exists
-  ansible.builtin.file:
-    path: "{{ tls_pki_src_dir }}"
-    state: directory
-    mode: '0755'
-
 # --------------
 # Build SAN list
 # --------------
@@ -59,15 +53,15 @@
 # -----------------------------------
 - name: Generate private key for multi-domain cert
   community.crypto.openssl_privatekey:
-    path: "{{ tls_pki_md_key_file_src }}"
+    path: "{{ tls_pki_md_key_file_local }}"
     size: 2048
     type: RSA
     mode: '0600'
 
 - name: Generate CSR with SANs (leaf)
   community.crypto.openssl_csr:
-    path: "{{ tls_pki_md_csr_file_src }}"
-    privatekey_path: "{{ tls_pki_md_key_file_src }}"
+    path: "{{ tls_pki_md_csr_file_local }}"
+    privatekey_path: "{{ tls_pki_md_key_file_local }}"
     common_name: "{{ tls_csr_common_name }}"
     subject_alt_name: "{{ san_list }}"
     key_usage:
@@ -79,18 +73,18 @@
 
 - name: Sign CSR with CA (leaf cert, selfsigned)
   community.crypto.x509_certificate:
-    path: "{{ tls_pki_md_cert_file_src }}"
-    csr_path: "{{ tls_pki_md_csr_file_src }}"
-    privatekey_path: "{{ tls_pki_md_key_file_src }}"
+    path: "{{ tls_pki_md_cert_file_local }}"
+    csr_path: "{{ tls_pki_md_csr_file_local }}"
+    privatekey_path: "{{ tls_pki_md_key_file_local }}"
     provider: selfsigned
   when: not tls_own_ca | bool
 
 - name: Sign CSR with CA (leaf cert, ownca)
   community.crypto.x509_certificate:
-    path: "{{ tls_pki_md_cert_file_src }}"
-    csr_path: "{{ tls_pki_md_csr_file_src }}"
+    path: "{{ tls_pki_md_cert_file_local }}"
+    csr_path: "{{ tls_pki_md_csr_file_local }}"
     provider: ownca
-    ownca_path: "{{ tls_pki_ca_cert_file_src }}"
-    ownca_privatekey_path: "{{ tls_pki_ca_key_file_src }}"
+    ownca_path: "{{ tls_pki_ca_cert_file_local }}"
+    ownca_privatekey_path: "{{ tls_pki_ca_key_file_local }}"
     ownca_not_after: "+365d"
   when: tls_own_ca | bool
