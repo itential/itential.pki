@@ -14,6 +14,56 @@
     mode: '0600'
   delegate_to: localhost
 
+# --------------
+# Build SAN list
+# --------------
+- name: SAN list - Add DNS:inventory_hostname
+  ansible.builtin.set_fact:
+    tls_san_list: "{{ 'DNS:' + inventory_hostname | list }}"
+  when: inventory_hostname is not match('^[0-9]{1,3}(?:\.[0-9]{1,3}){3}$')
+
+- name: SAN list - Add IP:inventory_hostname
+  ansible.builtin.set_fact:
+    tls_san_list: "{{ 'IP:' + inventory_hostname | list }}"
+  when: inventory_hostname is match('^[0-9]{1,3}(?:\.[0-9]{1,3}){3}$')
+
+- name: SAN list - Add DNS:ansible_fqdn when present
+  ansible.builtin.set_fact:
+    tls_san_list: "{{ (tls_san_list + ['DNS:' + ansible_fqdn]) | unique }}"
+  when: ansible_fqdn is defined
+
+- name: SAN list - Add IP/DNS from ansible_host if defined (regex detect IP)
+  ansible.builtin.set_fact:
+    tls_san_list: >-
+      {{
+        (tls_san_list + [
+          ('IP:'  + ansible_host)
+          if (ansible_host is match('^[0-9]{1,3}(?:\.[0-9]{1,3}){3}$'))
+          else ('DNS:' + ansible_host)
+        ]) | unique
+      }}
+  when: ansible_host is defined
+
+- name: SAN list - Add fallback IP from ansible_default_ipv4.address when ansible_host absent
+  ansible.builtin.set_fact:
+    tls_san_list: "{{ (tls_san_list + ['IP:' + ansible_default_ipv4.address]) | unique }}"
+  when:
+    - ansible_default_ipv4 is defined
+    - ansible_default_ipv4.address is defined
+
+- name: Sort SAN list for stable idempotent output
+  ansible.builtin.set_fact:
+    tls_san_list: "{{ tls_san_list | sort }}"
+
+- name: Ensure SAN list is not empty
+  ansible.builtin.assert:
+    that: tls_san_list | length > 0
+    fail_msg: "SAN list is empty; inventory produced no names/addresses."
+
+- name: Show SAN list
+  ansible.builtin.debug:
+    var: tls_san_list
+
 - name: Generate CSR with SANs
   community.crypto.openssl_csr:
     path: "{{ tls_pki_csr_file_local }}"
@@ -24,10 +74,7 @@
     organizational_unit_name: "{{ tls_csr_organizational_unit_name }}"
     state_or_province_name: "{{ tls_csr_state_or_province_name }}"
     locality_name: "{{ tls_csr_locality_name }}"
-    subject_alt_name:
-      - "DNS:{{ inventory_hostname }}"
-      - "DNS:{{ ansible_fqdn | default(inventory_hostname) }}"
-      - "IP:{{ ansible_default_ipv4.address | default('127.0.0.1') }}"
+    subject_alt_name: "{{ tls_san_list }}"
   delegate_to: localhost
 
 - name: Generate certificate with SANs (selfsigned)

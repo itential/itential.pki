@@ -11,11 +11,11 @@
 - name: Stat the local pki directory
   ansible.builtin.stat:
     path: "{{ tls_pki_local_dir }}"
-  register: stat_result
+  register: tls_pki_local_dir_stat_result
   delegate_to: localhost
   become: false
 
 - name: Validate local pki directory exists
   ansible.builtin.assert:
-    that: stat_result.stat.exists
+    that: tls_pki_local_dir_stat_result.stat.exists
     fail_msg: "Local pki directory '{{ tls_pki_local_dir }}' does not exist"
