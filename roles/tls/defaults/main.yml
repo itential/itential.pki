@@ -28,6 +28,10 @@ tls_pki_key_suffix: .key
 tls_pki_cert_suffix: .crt
 tls_pki_csr_suffix: .csr
 
+# Additional SAN defaults
+tls_additional_dns_sans: []
+tls_additional_ip_sans: []
+
 #############
 # CA defaults
 #############

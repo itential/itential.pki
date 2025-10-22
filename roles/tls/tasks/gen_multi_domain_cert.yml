@@ -35,6 +35,18 @@
     - hostvars[item].ansible_default_ipv4 is defined
     - hostvars[item].ansible_default_ipv4.address is defined
 
+- name: Add configured additional DNS SANs
+  ansible.builtin.set_fact:
+    tls_san_list: "{{ (tls_san_list + ['DNS:' + item]) | unique }}"
+  loop: "{{ tls_additional_dns_sans | list }}"
+  when: tls_additional_dns_sans | length > 0
+
+- name: Add configured additional IP SANs
+  ansible.builtin.set_fact:
+    tls_san_list: "{{ (tls_san_list + ['IP:' + item]) | unique }}"
+  loop: "{{ tls_additional_ip_sans }}"
+  when: tls_additional_ip_sans | length > 0
+
 - name: Sort SAN list for stable idempotent output
   ansible.builtin.set_fact:
     tls_san_list: "{{ tls_san_list | sort }}"
