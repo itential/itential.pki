@@ -1,6 +1,13 @@
 # Copyright (c) 2025, Itential, Inc
 # GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
 ---
+- name: Print upload details
+  ansible.builtin.debug:
+    msg:
+      - "Uploading CA cert"
+      - "   Source: {{ tls_pki_ca_cert_file_local }}"
+      - "   Destination: {{ tls_pki_ca_cert_file_dest }}"
+
 - name: Copy CA certificate
   ansible.builtin.copy:
     src: "{{ tls_pki_ca_cert_file_local }}"

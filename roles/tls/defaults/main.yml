@@ -67,7 +67,7 @@ tls_pki_csr_file_local: "{{ tls_pki_local_dir }}/{{ tls_pki_csr_file }}"
 # Multi-domain certificate
 tls_pki_cert_file: "{{ tls_pki_cert_filename }}{{ tls_pki_cert_suffix }}"
 tls_pki_cert_file_local: "{{ tls_pki_local_dir }}/{{ tls_pki_cert_file }}"
-tls_pki_cert_file_dest: "{{ tls_pki_cert_dir }}/{{ tls_pki_cert_file }}"
+tls_pki_cert_file_dest: "{{ tls_pki_certs_dir }}/{{ tls_pki_cert_file }}"
 
 ###################################
 # Multi-domain certificate defaults
@@ -86,4 +86,4 @@ tls_pki_md_csr_file_local: "{{ tls_pki_local_dir }}/{{ tls_pki_md_csr_file }}"
 # Multi-domain certificate
 tls_pki_md_cert_file: "{{ tls_pki_md_cert_filename }}{{ tls_pki_cert_suffix }}"
 tls_pki_md_cert_file_local: "{{ tls_pki_local_dir }}/{{ tls_pki_md_cert_file }}"
-tls_pki_md_cert_file_dest: "{{ tls_pki_cert_dir }}/{{ tls_pki_md_cert_file }}"
+tls_pki_md_cert_file_dest: "{{ tls_pki_certs_dir }}/{{ tls_pki_md_cert_file }}"
