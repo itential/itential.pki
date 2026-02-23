@@ -8,15 +8,6 @@
       - "   Source: {{ tls_pki_ca_cert_file_local }}"
       - "   Destination: {{ tls_pki_ca_cert_file_dest }}"
 
-
-- name: Ensure CA certificate directory exists
-  ansible.builtin.file:
-    path: "{{ tls_pki_ca_certs_dir }}"
-    state: directory
-    owner: root
-    group: root
-    mode: '0755'
-
 - name: Copy CA certificate
   ansible.builtin.copy:
     src: "{{ tls_pki_ca_cert_file_local }}"
@@ -24,4 +15,3 @@
     owner: root
     group: root
     mode: '0444'
-
