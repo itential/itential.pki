@@ -10,6 +10,17 @@
       - "   Cert source: {{ tls_pki_cert_file_local }}"
       - "   Cert destination: {{ tls_pki_cert_file_dest }}"
 
+- name: Ensure key and cert directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  loop:
+    - "{{ tls_pki_certs_dir }}"
+    - "{{ tls_pki_keys_dir }}"
+
 - name: Copy private key
   ansible.builtin.copy:
     src: "{{ tls_pki_key_file_local }}"
