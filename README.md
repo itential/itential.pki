@@ -39,7 +39,9 @@ All certificate generation runs on the **Ansible control node**. Only the upload
 
 Clone the repo to your control node.
 Build the itential-tls collection to create the tarball.
-ansible-galaxy collection build
+```bash
+ansible-galaxy collection buildi
+```
 Install the collection. Make sure your collections path is set appropriately.
 ```bash
 ansible-galaxy collection install itential-tls-<VERSION>.tar.gz
