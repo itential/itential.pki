@@ -12,12 +12,7 @@
 
 - name: Ensure key and cert directories exist
   ansible.builtin.include_tasks:
-    file: create_directory.yml
-  vars:
-    dir_path: "{{ item }}"
-  loop:
-    - "{{ tls_pki_certs_dir }}"
-    - "{{ tls_pki_keys_dir }}"
+    file: create_cert_directories.yml
 
 - name: Copy private key
   ansible.builtin.copy:

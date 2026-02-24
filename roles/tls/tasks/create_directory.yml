@@ -11,14 +11,15 @@
     filter: ansible_selinux
   when: ansible_selinux is not defined
 
-- name: Set SELinux context on directory
-  community.general.sefcontext:
-    target: "{{ dir_path }}(/.*)?"
-    setype: cert_t
-    state: present
-  when: ansible_selinux.status == "enabled"
-
 - name: Apply SELinux context to directory
-  ansible.builtin.command:
-    cmd: "restorecon -Rv {{ dir_path }}"
   when: ansible_selinux.status == "enabled"
+  block:
+    - name: Set SELinux context on directory
+      community.general.sefcontext:
+        target: "{{ dir_path }}(/.*)?"
+        setype: cert_t
+        state: present
+
+    - name: Restore SELinux context on directory
+      ansible.builtin.command:
+        cmd: "restorecon -Rv {{ dir_path }}"
