@@ -1,0 +1,10 @@
+# Copyright (c) 2025, Itential, Inc
+# GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
+- name: Create cert and key directories
+  ansible.builtin.include_tasks:
+    file: create_directory.yml
+  vars:
+    dir_path: "{{ item }}"
+  loop:
+    - "{{ tls_pki_certs_dir }}"
+    - "{{ tls_pki_keys_dir }}"

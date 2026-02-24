@@ -1,0 +1,27 @@
+# Copyright (c) 2025, Itential, Inc
+# GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
+- name: Ensure directory exists
+  ansible.builtin.file:
+    path: "{{ dir_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Gather SELinux facts
+  ansible.builtin.setup:
+    filter: ansible_selinux
+  when: ansible_selinux is not defined
+
+- name: Apply SELinux context to directory
+  when: ansible_selinux.status == "enabled"
+  block:
+    - name: Set SELinux context on directory
+      community.general.sefcontext:
+        target: "{{ dir_path }}(/.*)?"
+        setype: cert_t
+        state: present
+
+    - name: Restore SELinux context on directory
+      ansible.builtin.command:
+        cmd: "restorecon -Rv {{ dir_path }}"

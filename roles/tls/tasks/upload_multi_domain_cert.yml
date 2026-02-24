@@ -10,6 +10,10 @@
       - "   Cert source: {{ tls_pki_md_cert_file_local }}"
       - "   Cert destination: {{ tls_pki_md_cert_file_dest }}"
 
+- name: Ensure key and cert directories exist
+  ansible.builtin.include_tasks:
+    file: create_cert_directories.yml
+
 - name: Copy private key
   ansible.builtin.copy:
     src: "{{ tls_pki_md_key_file_local }}"
