@@ -202,14 +202,19 @@ For multi-domain certs, this runs for **every host** in the inventory, producing
 
 ## Examples
 
+Create a local directory to store the certificates.
+
+```bash
+$ mkdir -p ~/itential/pki
+```
+
+Add tls_pki_local_dir to your inventory with the directory.
 ### Minimal Inventory (Default Paths)
 
 ```yaml
 all:
   vars:
-    ansible_user: rocky
-    ansible_ssh_private_key_file: ~/.ssh/id_rsa
-    tls_pki_local_dir: /opt/certs
+    tls_pki_local_dir: ~/itential/pki
   hosts:
     node1.example.com:
       ansible_host: 10.0.0.11
@@ -218,7 +223,7 @@ all:
 ```
 
 ```bash
-ansible-playbook itential.tls.gen_ca_cert    -i inventory.yml
+ansible-playbook itential.tls.gen_ca_cert     -i inventory.yml
 ansible-playbook itential.tls.gen_certs       -i inventory.yml
 ansible-playbook itential.tls.upload_ca_cert  -i inventory.yml
 ansible-playbook itential.tls.upload_certs    -i inventory.yml
@@ -233,18 +238,15 @@ Use this when the default `/etc/pki` paths don't exist or you want a custom layo
 ```yaml
 all:
   vars:
-    ansible_user: rocky
-    ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
-    tls_pki_local_dir: /Users/ananth.munagala/iag5/certs
-    tls_pki_ca_filename:   amr
-    tls_pki_ca_certs_dir:  /etc/pki/am-ca-last
-    tls_pki_certs_dir:     /etc/pki/tls/am-key-last
-    tls_pki_keys_dir:      /etc/pki/tls/am-cert-last
+    tls_pki_local_dir:     ~/itential/pki
+    tls_pki_ca_certs_dir:  <custom-ca-dir>
+    tls_pki_certs_dir:     <custom-certs-dir>
+    tls_pki_keys_dir:      <custom-keys-dir>
   hosts:
-    ip-10-222-1-201.ec2.internal:
-      ansible_host: 54.225.16.141
-    ip-10-222-1-240.ec2.internal:
-      ansible_host: 3.92.167.90
+    node1.example.com:
+      ansible_host: 10.0.0.11
+    node2.example.com:
+      ansible_host: 10.0.0.12
 ```
 
 ---
@@ -254,7 +256,7 @@ all:
 ```yaml
 all:
   vars:
-    tls_pki_local_dir: /opt/pki
+    tls_pki_local_dir:                ~/itential/pki
     tls_csr_common_name:              MyApp
     tls_csr_country_name:             US
     tls_csr_organization_name:        Acme Corp
@@ -271,7 +273,7 @@ all:
 ```yaml
 all:
   vars:
-    tls_pki_local_dir: /opt/pki
+    tls_pki_local_dir: ~/itential/pki
     tls_additional_dns_sans:
       - app.internal.example.com
       - api.internal.example.com
@@ -287,7 +289,7 @@ all:
 ```yaml
 all:
   vars:
-    tls_pki_local_dir: /opt/pki
+    tls_pki_local_dir: ~/itential/pki
     tls_own_ca: false
 ```
 
