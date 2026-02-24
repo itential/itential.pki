@@ -7,6 +7,7 @@
 ## Table of Contents
 
 - [Overview](#overview)
+- [Installation](#installation)
 - [Playbooks](#playbooks)
 - [Variables Reference](#variables-reference)
   - [Required](#required)
@@ -33,6 +34,16 @@ This collection manages the full TLS certificate lifecycle:
 3. Upload the CA cert and leaf certs to remote hosts
 
 All certificate generation runs on the **Ansible control node**. Only the upload playbooks touch remote hosts.
+
+## Installation
+
+Clone the repo to your control node.
+Build the itential-tls collection to create the tarball.
+ansible-galaxy collection build
+Install the collection. Make sure your collections path is set appropriately.
+```bash
+ansible-galaxy collection install itential-tls-<VERSION>.tar.gz
+```
 
 ---
 
