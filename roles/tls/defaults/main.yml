@@ -26,6 +26,7 @@ tls_ca_common_name: Itential CA
 # Key, certificate and CSR suffix
 tls_pki_key_suffix: .key
 tls_pki_cert_suffix: .crt
+tls_pki_pem_suffix: .pem
 tls_pki_csr_suffix: .csr
 
 # Additional SAN defaults
@@ -51,23 +52,28 @@ tls_pki_ca_cert_file_local: "{{ tls_pki_local_dir }}/{{ tls_pki_ca_cert_file }}"
 tls_pki_ca_cert_file_dest: "{{ tls_pki_ca_certs_dir }}/{{ tls_pki_ca_cert_file }}"
 
 ###################################
-# Certificate defaults
+# Server certificate defaults
 ###################################
 tls_pki_cert_filename: "{{ inventory_hostname }}"
 
-# Multi-domain key
+# Server key
 tls_pki_key_file: "{{ tls_pki_cert_filename }}{{ tls_pki_key_suffix }}"
 tls_pki_key_file_local: "{{ tls_pki_local_dir }}/{{ tls_pki_key_file }}"
 tls_pki_key_file_dest: "{{ tls_pki_keys_dir }}/{{ tls_pki_key_file }}"
 
-# Multi-domain CSR
+# Server CSR
 tls_pki_csr_file: "{{ tls_pki_cert_filename }}{{ tls_pki_csr_suffix }}"
 tls_pki_csr_file_local: "{{ tls_pki_local_dir }}/{{ tls_pki_csr_file }}"
 
-# Multi-domain certificate
+# Server certificate
 tls_pki_cert_file: "{{ tls_pki_cert_filename }}{{ tls_pki_cert_suffix }}"
 tls_pki_cert_file_local: "{{ tls_pki_local_dir }}/{{ tls_pki_cert_file }}"
 tls_pki_cert_file_dest: "{{ tls_pki_certs_dir }}/{{ tls_pki_cert_file }}"
+
+# PEM file (key + cert)
+tls_pki_pem_file: "{{ tls_pki_cert_filename }}{{ tls_pki_pem_suffix }}"
+tls_pki_pem_file_local: "{{ tls_pki_local_dir }}/{{ tls_pki_pem_file }}"
+tls_pki_pem_file_dest: "{{ tls_pki_certs_dir }}/{{ tls_pki_pem_file }}"
 
 ###################################
 # Multi-domain certificate defaults
@@ -87,3 +93,8 @@ tls_pki_md_csr_file_local: "{{ tls_pki_local_dir }}/{{ tls_pki_md_csr_file }}"
 tls_pki_md_cert_file: "{{ tls_pki_md_cert_filename }}{{ tls_pki_cert_suffix }}"
 tls_pki_md_cert_file_local: "{{ tls_pki_local_dir }}/{{ tls_pki_md_cert_file }}"
 tls_pki_md_cert_file_dest: "{{ tls_pki_certs_dir }}/{{ tls_pki_md_cert_file }}"
+
+# Multi-domain PEM file (key + cert)
+tls_pki_md_pem_file: "{{ tls_pki_md_cert_filename }}{{ tls_pki_pem_suffix }}"
+tls_pki_md_pem_file_local: "{{ tls_pki_local_dir }}/{{ tls_pki_md_pem_file }}"
+tls_pki_md_pem_file_dest: "{{ tls_pki_certs_dir }}/{{ tls_pki_md_pem_file }}"
