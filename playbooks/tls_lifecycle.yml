@@ -1,0 +1,52 @@
+# Copyright (c) 2025, Itential, Inc
+# GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+- name: Generate CA cert
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    # Generates a 4096-bit RSA CA private key and self-signed CA certificate on the
+    # control node. Output files (ca.key, ca.csr, ca.crt) are written to tls_pki_local_dir.
+    - name: Generate CA cert
+      ansible.builtin.import_role:
+        name: itential.tls.tls
+        tasks_from: gen_ca_cert
+
+- name: Generate certificates with SANs for all hosts
+  hosts: all
+  gather_facts: true
+  tasks:
+    # Generates a 2048-bit RSA private key, CSR, and signed leaf certificate for each
+    # inventory host on the control node. Facts are gathered so that ansible_fqdn,
+    # ansible_host, and ansible_default_ipv4 can be used to auto-build the SAN list.
+    # All files are written locally to tls_pki_local_dir; nothing is pushed to hosts yet.
+    - name: Generate certs for all hosts
+      ansible.builtin.import_role:
+        name: itential.tls.tls
+        tasks_from: gen_certs
+
+- name: Upload CA cert to all hosts
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    # Copies the CA certificate from tls_pki_local_dir to tls_pki_ca_certs_dir on every
+    # host (mode 0444). Requires become because the destination is owned by root.
+    # Hosts need the CA cert so they can trust certificates signed by it.
+    - name: Upload CA cert to all hosts
+      ansible.builtin.import_role:
+        name: itential.tls.tls
+        tasks_from: upload_ca_cert
+
+- name: Upload cert to hosts
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    # Copies each host's private key (mode 0600) and certificate (mode 0444) from
+    # tls_pki_local_dir to tls_pki_keys_dir and tls_pki_certs_dir respectively.
+    # Requires become because the destination directories are owned by root.
+    - name: Upload cert to hosts
+      ansible.builtin.import_role:
+        name: itential.tls.tls
+        tasks_from: upload_certs
