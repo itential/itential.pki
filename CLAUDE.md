@@ -28,6 +28,9 @@ ansible-galaxy collection install . --force             # Install this collectio
 ### Run the playbooks
 
 ```bash
+# Per-host workflow (single command)
+ansible-playbook -i <inventory> playbooks/tls_lifecycle.yml
+
 # Per-host workflow (run in order)
 ansible-playbook -i <inventory> playbooks/gen_ca_cert.yml
 ansible-playbook -i <inventory> playbooks/gen_certs.yml
@@ -45,6 +48,7 @@ ansible-playbook -i <inventory> playbooks/upload_multi_domain_cert.yml
 
 ```
 playbooks/
+  tls_lifecycle.yml             # End-to-end per-host workflow (CA gen + cert gen + upload)
   gen_ca_cert.yml               # Generate CA on localhost
   gen_certs.yml                 # Generate per-host certs on localhost
   gen_multi_domain_cert.yml     # Generate shared multi-SAN cert on localhost
@@ -123,6 +127,8 @@ All variables live in `roles/tls/defaults/main.yml`.
 
 Playbooks are thin wrappers that call `import_role: name: itential.tls.tls tasks_from: <task_file>`.
 
+- `tls_lifecycle.yml` runs the full per-host workflow (CA gen, cert gen, CA upload, cert upload)
+  as four sequential plays in one invocation.
 - `gen_*` playbooks target `localhost`, `gather_facts: false` (except `gen_certs.yml`
   and `gen_multi_domain_cert.yml` which need facts from `all` first to build SANs).
 - `upload_*` playbooks target `all`, `become: true`.
