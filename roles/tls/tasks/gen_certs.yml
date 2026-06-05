@@ -114,6 +114,4 @@
 
 - name: Generate PEM file (key + cert)
   ansible.builtin.shell: cat {{ tls_pki_key_file_local }} {{ tls_pki_cert_file_local }} > {{ tls_pki_pem_file_local }}
-  args:
-    creates: "{{ tls_pki_pem_file_local }}"
   delegate_to: localhost
