@@ -91,6 +91,12 @@
     state_or_province_name: "{{ tls_csr_state_or_province_name }}"
     locality_name: "{{ tls_csr_locality_name }}"
     subject_alt_name: "{{ tls_san_list }}"
+    key_usage:
+      - digitalSignature
+      - keyEncipherment
+    extended_key_usage:
+      - serverAuth
+      - clientAuth
   delegate_to: localhost
 
 - name: Generate certificate with SANs (selfsigned)

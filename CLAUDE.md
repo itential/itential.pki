@@ -4,7 +4,7 @@ This file provides guidance to Claude Code when working in this Ansible collecti
 
 ## What This Collection Is
 
-`itential.tls` (v0.0.3) is an Ansible collection for TLS certificate lifecycle management.
+`itential.tls` (v1.0.0) is an Ansible collection for TLS certificate lifecycle management.
 It generates and deploys CA certificates and signed leaf certificates to target hosts using
 `community.crypto`. All cryptographic operations run on the control node (`delegate_to: localhost`);
 only the upload playbooks push files to remote hosts.
@@ -110,6 +110,7 @@ All variables live in `roles/tls/defaults/main.yml`.
 
 - 2048-bit RSA key
 - Key usage: `digitalSignature`, `keyEncipherment`
+- Extended key usage: `serverAuth`, `clientAuth`
 - SANs auto-built from: `inventory_hostname`, `ansible_fqdn`, `ansible_host`,
   `ansible_default_ipv4.address`, plus any `tls_additional_*_sans` entries
 - Files: `<hostname>.key`, `<hostname>.csr`, `<hostname>.crt`, `<hostname>.pem`
