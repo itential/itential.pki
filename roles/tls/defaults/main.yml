@@ -20,6 +20,13 @@ tls_csr_organizational_unit_name: IT
 tls_csr_state_or_province_name: Georgia
 tls_csr_locality_name: Atlanta
 
+# Extended Key Usage applied to generated leaf certs (per-host + multi-domain).
+# Default matches the multi-domain workflow's previous hardcoded value, so
+# existing users of that workflow see no behavior change unless overridden.
+tls_extended_key_usage:
+  - serverAuth
+  - clientAuth
+
 # CA defaults
 tls_ca_common_name: Itential CA
 

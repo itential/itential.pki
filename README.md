@@ -119,6 +119,16 @@ Additional SANs are appended to the automatically-discovered list built from `in
 
 ---
 
+### Extended Key Usage
+
+Applied to per-host and multi-domain leaf certificates. Not used for the CA certificate.
+
+| Variable | Default | Description |
+|---|---|---|
+| `tls_extended_key_usage` | `[serverAuth, clientAuth]` | Extended Key Usage (EKU) values for generated leaf certificates |
+
+---
+
 ### File Suffixes
 
 | Variable | Default | Description |
@@ -183,8 +193,8 @@ A single certificate shared across all inventory hosts.
 | Leaf key size | 2048-bit RSA | Per-host and multi-domain certs |
 | CA basic constraint | `CA:TRUE` | Marks certificate as a CA |
 | CA key usage | `keyCertSign`, `cRLSign` | Required CA extensions |
-| Leaf key usage | `digitalSignature`, `keyEncipherment` | Standard TLS leaf usage (multi-domain) |
-| Leaf extended key usage | `serverAuth`, `clientAuth` | Allows use for TLS server and client auth |
+| Leaf key usage | `digitalSignature`, `keyEncipherment` | Standard TLS leaf usage (per-host and multi-domain) |
+| Leaf extended key usage | `tls_extended_key_usage` (default `serverAuth`, `clientAuth`) | Configurable — see [Extended Key Usage](#extended-key-usage) |
 | CA validity | openssl default (~30 days) | No explicit `not_after` set — override if needed |
 | Leaf validity | `+365d` | Multi-domain certs. Per-host uses provider default. |
 

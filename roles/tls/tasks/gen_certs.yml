@@ -94,9 +94,7 @@
     key_usage:
       - digitalSignature
       - keyEncipherment
-    extended_key_usage:
-      - serverAuth
-      - clientAuth
+    extended_key_usage: "{{ tls_extended_key_usage }}"
   delegate_to: localhost
 
 - name: Generate certificate with SANs (selfsigned)

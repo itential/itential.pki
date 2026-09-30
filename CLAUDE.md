@@ -4,7 +4,7 @@ This file provides guidance to Claude Code when working in this Ansible collecti
 
 ## What This Collection Is
 
-`itential.tls` (v1.0.0) is an Ansible collection for TLS certificate lifecycle management.
+`itential.tls` (v1.0.1) is an Ansible collection for TLS certificate lifecycle management.
 It generates and deploys CA certificates and signed leaf certificates to target hosts using
 `community.crypto`. All cryptographic operations run on the control node (`delegate_to: localhost`);
 only the upload playbooks push files to remote hosts.
@@ -96,6 +96,7 @@ All variables live in `roles/tls/defaults/main.yml`.
 | `tls_pki_md_cert_filename` | `itential` | Base name for multi-domain files |
 | `tls_additional_dns_sans` | `[]` | Extra DNS SANs appended to every cert |
 | `tls_additional_ip_sans` | `[]` | Extra IP SANs appended to every cert |
+| `tls_extended_key_usage` | `[serverAuth, clientAuth]` | Extended Key Usage applied to per-host and multi-domain leaf certs |
 
 ## Certificate Details
 
@@ -110,7 +111,7 @@ All variables live in `roles/tls/defaults/main.yml`.
 
 - 2048-bit RSA key
 - Key usage: `digitalSignature`, `keyEncipherment`
-- Extended key usage: `serverAuth`, `clientAuth`
+- Extended key usage: `tls_extended_key_usage` (default `serverAuth`, `clientAuth`)
 - SANs auto-built from: `inventory_hostname`, `ansible_fqdn`, `ansible_host`,
   `ansible_default_ipv4.address`, plus any `tls_additional_*_sans` entries
 - Files: `<hostname>.key`, `<hostname>.csr`, `<hostname>.crt`, `<hostname>.pem`
@@ -119,7 +120,8 @@ All variables live in `roles/tls/defaults/main.yml`.
 ### Multi-domain certificate
 
 - 2048-bit RSA key
-- Extended key usage: `serverAuth`, `clientAuth`
+- Key usage: `digitalSignature`, `keyEncipherment`
+- Extended key usage: `tls_extended_key_usage` (default `serverAuth`, `clientAuth`)
 - SANs aggregated from ALL inventory hosts
 - Validity: `+365d` (explicit)
 - Files: `itential.key`, `itential.csr`, `itential.crt`, `itential.pem`
