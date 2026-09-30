@@ -79,9 +79,7 @@
     key_usage:
       - digitalSignature
       - keyEncipherment
-    extended_key_usage:
-      - serverAuth
-      - clientAuth
+    extended_key_usage: "{{ tls_extended_key_usage }}"
 
 - name: Sign CSR with CA (leaf cert, selfsigned)
   community.crypto.x509_certificate:
@@ -103,6 +101,4 @@
 
 - name: Generate PEM file (key + cert)
   ansible.builtin.shell: cat {{ tls_pki_md_key_file_local }} {{ tls_pki_md_cert_file_local }} > {{ tls_pki_md_pem_file_local }}
-  args:
-    creates: "{{ tls_pki_pem_file_local }}"
   delegate_to: localhost
