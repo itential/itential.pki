@@ -25,3 +25,5 @@
     - name: Restore SELinux context on directory
       ansible.builtin.command:
         cmd: "restorecon -Rv {{ dir_path }}"
+      register: pki_restorecon_result
+      changed_when: pki_restorecon_result.stdout != ''

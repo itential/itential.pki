@@ -117,5 +117,8 @@
   delegate_to: localhost
 
 - name: Generate PEM file (key + cert)
-  ansible.builtin.shell: cat {{ pki_key_file_local }} {{ pki_cert_file_local }} > {{ pki_pem_file_local }}
+  ansible.builtin.copy:
+    content: "{{ lookup('file', pki_key_file_local) }}\n{{ lookup('file', pki_cert_file_local) }}\n"
+    dest: "{{ pki_pem_file_local }}"
+    mode: '0600'
   delegate_to: localhost
