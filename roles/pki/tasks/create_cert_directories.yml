@@ -6,5 +6,5 @@
   vars:
     dir_path: "{{ item }}"
   loop:
-    - "{{ tls_pki_certs_dir }}"
-    - "{{ tls_pki_keys_dir }}"
+    - "{{ pki_certs_dir }}"
+    - "{{ pki_keys_dir }}"

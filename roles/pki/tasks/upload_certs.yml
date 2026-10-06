@@ -5,10 +5,10 @@
   ansible.builtin.debug:
     msg:
       - "Uploading key and cert"
-      - "   Key source: {{ tls_pki_key_file_local }}"
-      - "   Key destination: {{ tls_pki_key_file_dest }}"
-      - "   Cert source: {{ tls_pki_cert_file_local }}"
-      - "   Cert destination: {{ tls_pki_cert_file_dest }}"
+      - "   Key source: {{ pki_key_file_local }}"
+      - "   Key destination: {{ pki_key_file_dest }}"
+      - "   Cert source: {{ pki_cert_file_local }}"
+      - "   Cert destination: {{ pki_cert_file_dest }}"
 
 - name: Ensure key and cert directories exist
   ansible.builtin.include_tasks:
@@ -16,16 +16,16 @@
 
 - name: Copy private key
   ansible.builtin.copy:
-    src: "{{ tls_pki_key_file_local }}"
-    dest: "{{ tls_pki_key_file_dest }}"
+    src: "{{ pki_key_file_local }}"
+    dest: "{{ pki_key_file_dest }}"
     owner: root
     group: root
     mode: '0600'
 
 - name: Copy certificate
   ansible.builtin.copy:
-    src: "{{ tls_pki_cert_file_local }}"
-    dest: "{{ tls_pki_cert_file_dest }}"
+    src: "{{ pki_cert_file_local }}"
+    dest: "{{ pki_cert_file_dest }}"
     owner: root
     group: root
     mode: '0444'

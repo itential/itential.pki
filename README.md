@@ -68,7 +68,7 @@ ansible-galaxy collection install itential-pki-<VERSION>.tar.gz
 
 | Variable | Default | Description |
 |---|---|---|
-| `tls_pki_local_dir` | *(none — required)* | Absolute path on the control node where generated keys, CSRs, and certs are stored. Must exist before running any playbook. |
+| `pki_local_dir` | *(none — required)* | Absolute path on the control node where generated keys, CSRs, and certs are stored. Must exist before running any playbook. |
 
 ---
 
@@ -78,9 +78,9 @@ Directories on remote hosts where files are installed. Created automatically if 
 
 | Variable | Default | Description |
 |---|---|---|
-| `tls_pki_ca_certs_dir` | `/etc/pki/ca-trust/source/anchors` | Where the CA certificate is installed on remote hosts |
-| `tls_pki_certs_dir` | `/etc/pki/tls/certs` | Where leaf/host certificates are installed on remote hosts |
-| `tls_pki_keys_dir` | `/etc/pki/tls/private` | Where private keys are installed on remote hosts |
+| `pki_ca_certs_dir` | `/etc/pki/ca-trust/source/anchors` | Where the CA certificate is installed on remote hosts |
+| `pki_certs_dir` | `/etc/pki/tls/certs` | Where leaf/host certificates are installed on remote hosts |
+| `pki_keys_dir` | `/etc/pki/tls/private` | Where private keys are installed on remote hosts |
 
 ---
 
@@ -90,13 +90,13 @@ Populate the Distinguished Name fields in generated CSRs and certificates.
 
 | Variable | Default | Description |
 |---|---|---|
-| `tls_csr_common_name` | `Itential` | Common Name (CN) |
-| `tls_csr_country_name` | `US` | Two-letter ISO 3166-1 country code |
-| `tls_csr_organization_name` | `Itential` | Organization (O) |
-| `tls_csr_organizational_unit_name` | `IT` | Organizational Unit (OU) |
-| `tls_csr_state_or_province_name` | `Georgia` | State or Province (ST) |
-| `tls_csr_locality_name` | `Atlanta` | City or Locality (L) |
-| `tls_ca_common_name` | `Itential CA` | Common Name used specifically for the CA certificate |
+| `pki_csr_common_name` | `Itential` | Common Name (CN) |
+| `pki_csr_country_name` | `US` | Two-letter ISO 3166-1 country code |
+| `pki_csr_organization_name` | `Itential` | Organization (O) |
+| `pki_csr_organizational_unit_name` | `IT` | Organizational Unit (OU) |
+| `pki_csr_state_or_province_name` | `Georgia` | State or Province (ST) |
+| `pki_csr_locality_name` | `Atlanta` | City or Locality (L) |
+| `pki_ca_common_name` | `Itential CA` | Common Name used specifically for the CA certificate |
 
 ---
 
@@ -104,7 +104,7 @@ Populate the Distinguished Name fields in generated CSRs and certificates.
 
 | Variable | Default | Description |
 |---|---|---|
-| `tls_own_ca` | `true` | When `true`, certificates are signed by the local CA (`ownca` provider). When `false`, certificates are self-signed. |
+| `pki_own_ca` | `true` | When `true`, certificates are signed by the local CA (`ownca` provider). When `false`, certificates are self-signed. |
 
 ---
 
@@ -114,8 +114,8 @@ Additional SANs are appended to the automatically-discovered list built from `in
 
 | Variable | Default | Description |
 |---|---|---|
-| `tls_additional_dns_sans` | `[]` | Extra DNS names to include in the SAN extension |
-| `tls_additional_ip_sans` | `[]` | Extra IP addresses to include in the SAN extension |
+| `pki_additional_dns_sans` | `[]` | Extra DNS names to include in the SAN extension |
+| `pki_additional_ip_sans` | `[]` | Extra IP addresses to include in the SAN extension |
 
 ---
 
@@ -125,7 +125,7 @@ Applied to per-host and multi-domain leaf certificates. Not used for the CA cert
 
 | Variable | Default | Description |
 |---|---|---|
-| `tls_extended_key_usage` | `[serverAuth, clientAuth]` | Extended Key Usage (EKU) values for generated leaf certificates |
+| `pki_extended_key_usage` | `[serverAuth, clientAuth]` | Extended Key Usage (EKU) values for generated leaf certificates |
 
 ---
 
@@ -133,23 +133,23 @@ Applied to per-host and multi-domain leaf certificates. Not used for the CA cert
 
 | Variable | Default | Description |
 |---|---|---|
-| `tls_pki_key_suffix` | `.key` | Extension appended to key filenames |
-| `tls_pki_cert_suffix` | `.crt` | Extension appended to certificate filenames |
-| `tls_pki_csr_suffix` | `.csr` | Extension appended to CSR filenames |
+| `pki_key_suffix` | `.key` | Extension appended to key filenames |
+| `pki_cert_suffix` | `.crt` | Extension appended to certificate filenames |
+| `pki_csr_suffix` | `.csr` | Extension appended to CSR filenames |
 
 ---
 
 ### CA File Variables
 
-Override `tls_pki_ca_filename` to rename all CA files at once. All other CA file variables are derived from it.
+Override `pki_ca_filename` to rename all CA files at once. All other CA file variables are derived from it.
 
 | Variable | Default | Description |
 |---|---|---|
-| `tls_pki_ca_filename` | `ca` | Base filename for all CA files |
-| `tls_pki_ca_key_file_local` | `{{ tls_pki_local_dir }}/ca.key` | Local path to the CA private key |
-| `tls_pki_ca_csr_file_local` | `{{ tls_pki_local_dir }}/ca.csr` | Local path to the CA CSR |
-| `tls_pki_ca_cert_file_local` | `{{ tls_pki_local_dir }}/ca.crt` | Local path to the CA certificate |
-| `tls_pki_ca_cert_file_dest` | `{{ tls_pki_ca_certs_dir }}/ca.crt` | Remote path where the CA cert is installed |
+| `pki_ca_filename` | `ca` | Base filename for all CA files |
+| `pki_ca_key_file_local` | `{{ pki_local_dir }}/ca.key` | Local path to the CA private key |
+| `pki_ca_csr_file_local` | `{{ pki_local_dir }}/ca.csr` | Local path to the CA CSR |
+| `pki_ca_cert_file_local` | `{{ pki_local_dir }}/ca.crt` | Local path to the CA certificate |
+| `pki_ca_cert_file_dest` | `{{ pki_ca_certs_dir }}/ca.crt` | Remote path where the CA cert is installed |
 
 ---
 
@@ -159,12 +159,12 @@ The cert filename defaults to `inventory_hostname` so each host gets a uniquely-
 
 | Variable | Default | Description |
 |---|---|---|
-| `tls_pki_cert_filename` | `{{ inventory_hostname }}` | Base filename for this host's certificate files |
-| `tls_pki_key_file_local` | `{{ tls_pki_local_dir }}/<hostname>.key` | Local path to the host private key |
-| `tls_pki_key_file_dest` | `{{ tls_pki_keys_dir }}/<hostname>.key` | Remote path for the host private key |
-| `tls_pki_csr_file_local` | `{{ tls_pki_local_dir }}/<hostname>.csr` | Local path to the host CSR |
-| `tls_pki_cert_file_local` | `{{ tls_pki_local_dir }}/<hostname>.crt` | Local path to the host certificate |
-| `tls_pki_cert_file_dest` | `{{ tls_pki_certs_dir }}/<hostname>.crt` | Remote path for the host certificate |
+| `pki_cert_filename` | `{{ inventory_hostname }}` | Base filename for this host's certificate files |
+| `pki_key_file_local` | `{{ pki_local_dir }}/<hostname>.key` | Local path to the host private key |
+| `pki_key_file_dest` | `{{ pki_keys_dir }}/<hostname>.key` | Remote path for the host private key |
+| `pki_csr_file_local` | `{{ pki_local_dir }}/<hostname>.csr` | Local path to the host CSR |
+| `pki_cert_file_local` | `{{ pki_local_dir }}/<hostname>.crt` | Local path to the host certificate |
+| `pki_cert_file_dest` | `{{ pki_certs_dir }}/<hostname>.crt` | Remote path for the host certificate |
 
 ---
 
@@ -174,12 +174,12 @@ A single certificate shared across all inventory hosts.
 
 | Variable | Default | Description |
 |---|---|---|
-| `tls_pki_md_cert_filename` | `itential` | Base filename for the multi-domain certificate files |
-| `tls_pki_md_key_file_local` | `{{ tls_pki_local_dir }}/itential.key` | Local path to the multi-domain private key |
-| `tls_pki_md_key_file_dest` | `{{ tls_pki_keys_dir }}/itential.key` | Remote path for the multi-domain private key |
-| `tls_pki_md_csr_file_local` | `{{ tls_pki_local_dir }}/itential.csr` | Local path to the multi-domain CSR |
-| `tls_pki_md_cert_file_local` | `{{ tls_pki_local_dir }}/itential.crt` | Local path to the multi-domain certificate |
-| `tls_pki_md_cert_file_dest` | `{{ tls_pki_certs_dir }}/itential.crt` | Remote path for the multi-domain certificate |
+| `pki_md_cert_filename` | `itential` | Base filename for the multi-domain certificate files |
+| `pki_md_key_file_local` | `{{ pki_local_dir }}/itential.key` | Local path to the multi-domain private key |
+| `pki_md_key_file_dest` | `{{ pki_keys_dir }}/itential.key` | Remote path for the multi-domain private key |
+| `pki_md_csr_file_local` | `{{ pki_local_dir }}/itential.csr` | Local path to the multi-domain CSR |
+| `pki_md_cert_file_local` | `{{ pki_local_dir }}/itential.crt` | Local path to the multi-domain certificate |
+| `pki_md_cert_file_dest` | `{{ pki_certs_dir }}/itential.crt` | Remote path for the multi-domain certificate |
 
 ---
 
@@ -194,7 +194,7 @@ A single certificate shared across all inventory hosts.
 | CA basic constraint | `CA:TRUE` | Marks certificate as a CA |
 | CA key usage | `keyCertSign`, `cRLSign` | Required CA extensions |
 | Leaf key usage | `digitalSignature`, `keyEncipherment` | Standard TLS leaf usage (per-host and multi-domain) |
-| Leaf extended key usage | `tls_extended_key_usage` (default `serverAuth`, `clientAuth`) | Configurable — see [Extended Key Usage](#extended-key-usage) |
+| Leaf extended key usage | `pki_extended_key_usage` (default `serverAuth`, `clientAuth`) | Configurable — see [Extended Key Usage](#extended-key-usage) |
 | CA validity | openssl default (~30 days) | No explicit `not_after` set — override if needed |
 | Leaf validity | `+365d` | Multi-domain certs. Per-host uses provider default. |
 
@@ -217,7 +217,7 @@ The collection automatically builds a SAN list per certificate from:
 - `IP:inventory_hostname` — if a bare IP
 - `DNS:ansible_fqdn` — when the fact is available
 - `IP:` or `DNS:ansible_host` — detected automatically
-- All values in `tls_additional_dns_sans` and `tls_additional_ip_sans`
+- All values in `pki_additional_dns_sans` and `pki_additional_ip_sans`
 
 For multi-domain certs, this runs for **every host** in the inventory, producing a single cert valid for all nodes.
 
@@ -231,13 +231,13 @@ Create a local directory to store the certificates.
 $ mkdir -p ~/itential/pki
 ```
 
-Add tls_pki_local_dir to your inventory with the directory.
+Add pki_local_dir to your inventory with the directory.
 ### Minimal Inventory (Default Paths)
 
 ```yaml
 all:
   vars:
-    tls_pki_local_dir: ~/itential/pki
+    pki_local_dir: ~/itential/pki
   hosts:
     node1.example.com:
       ansible_host: 10.0.0.11
@@ -261,10 +261,10 @@ Use this when the default `/etc/pki` paths don't exist or you want a custom layo
 ```yaml
 all:
   vars:
-    tls_pki_local_dir:     ~/itential/pki
-    tls_pki_ca_certs_dir:  <custom-ca-dir>
-    tls_pki_certs_dir:     <custom-certs-dir>
-    tls_pki_keys_dir:      <custom-keys-dir>
+    pki_local_dir:     ~/itential/pki
+    pki_ca_certs_dir:  <custom-ca-dir>
+    pki_certs_dir:     <custom-certs-dir>
+    pki_keys_dir:      <custom-keys-dir>
   hosts:
     node1.example.com:
       ansible_host: 10.0.0.11
@@ -279,14 +279,14 @@ all:
 ```yaml
 all:
   vars:
-    tls_pki_local_dir:                ~/itential/pki
-    tls_csr_common_name:              MyApp
-    tls_csr_country_name:             US
-    tls_csr_organization_name:        Acme Corp
-    tls_csr_organizational_unit_name: Engineering
-    tls_csr_state_or_province_name:   California
-    tls_csr_locality_name:            San Francisco
-    tls_ca_common_name:               Acme Internal CA
+    pki_local_dir:                ~/itential/pki
+    pki_csr_common_name:              MyApp
+    pki_csr_country_name:             US
+    pki_csr_organization_name:        Acme Corp
+    pki_csr_organizational_unit_name: Engineering
+    pki_csr_state_or_province_name:   California
+    pki_csr_locality_name:            San Francisco
+    pki_ca_common_name:               Acme Internal CA
 ```
 
 ---
@@ -296,11 +296,11 @@ all:
 ```yaml
 all:
   vars:
-    tls_pki_local_dir: ~/itential/pki
-    tls_additional_dns_sans:
+    pki_local_dir: ~/itential/pki
+    pki_additional_dns_sans:
       - app.internal.example.com
       - api.internal.example.com
-    tls_additional_ip_sans:
+    pki_additional_ip_sans:
       - 10.0.100.5
       - 10.0.100.6
 ```
@@ -312,8 +312,8 @@ all:
 ```yaml
 all:
   vars:
-    tls_pki_local_dir: ~/itential/pki
-    tls_own_ca: false
+    pki_local_dir: ~/itential/pki
+    pki_own_ca: false
 ```
 
 > **Note:** Most clients will not trust self-signed certificates without a manual trust import.
@@ -338,10 +338,10 @@ ansible-playbook itential.pki.upload_ca_cert           -i inventory.yml
 ansible-playbook itential.pki.upload_multi_domain_cert -i inventory.yml
 ```
 
-Override `tls_pki_md_cert_filename` to rename the shared cert files:
+Override `pki_md_cert_filename` to rename the shared cert files:
 
 ```yaml
-tls_pki_md_cert_filename: myapp-shared
+pki_md_cert_filename: myapp-shared
 # Produces: myapp-shared.key, myapp-shared.csr, myapp-shared.crt
 ```
 
@@ -349,8 +349,8 @@ tls_pki_md_cert_filename: myapp-shared
 
 ## Notes & Caveats
 
-- **`tls_pki_local_dir` must exist** on the control node before running any playbook. The collection validates this at startup and fails with a clear error if missing.
-- **Remote directories are created automatically** by the upload playbooks (`tls_pki_ca_certs_dir`, `tls_pki_certs_dir`, `tls_pki_keys_dir`).
+- **`pki_local_dir` must exist** on the control node before running any playbook. The collection validates this at startup and fails with a clear error if missing.
+- **Remote directories are created automatically** by the upload playbooks (`pki_ca_certs_dir`, `pki_certs_dir`, `pki_keys_dir`).
 - **The CA private key stays local.** It is never uploaded to remote hosts.
 - **CA certificate validity is not explicitly set** in `gen_ca_cert`. The OpenSSL default is ~30 days. Add `selfsigned_not_after: "+10y"` to the self-sign task if a longer lifetime is needed.
 - **Multi-domain certificates expire after 365 days** (`ownca_not_after: +365d`).
