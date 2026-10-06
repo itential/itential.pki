@@ -1,10 +1,10 @@
-# CLAUDE.md -- itential.tls
+# CLAUDE.md -- itential.pki
 
 This file provides guidance to Claude Code when working in this Ansible collection.
 
 ## What This Collection Is
 
-`itential.tls` (v1.0.1) is an Ansible collection for TLS certificate lifecycle management.
+`itential.pki` (v1.0.1) is an Ansible collection for TLS certificate lifecycle management.
 It generates and deploys CA certificates and signed leaf certificates to target hosts using
 `community.crypto`. All cryptographic operations run on the control node (`delegate_to: localhost`);
 only the upload playbooks push files to remote hosts.
@@ -128,7 +128,7 @@ All variables live in `roles/tls/defaults/main.yml`.
 
 ## Playbook Structure
 
-Playbooks are thin wrappers that call `import_role: name: itential.tls.tls tasks_from: <task_file>`.
+Playbooks are thin wrappers that call `import_role: name: itential.pki.tls tasks_from: <task_file>`.
 
 - `tls_lifecycle.yml` runs the full per-host workflow (CA gen, cert gen, CA upload, cert upload)
   as four sequential plays in one invocation.

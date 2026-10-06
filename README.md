@@ -1,4 +1,4 @@
-# itential.tls Ansible Collection
+# itential.pki Ansible Collection
 
 > Generate and distribute TLS certificates across your infrastructure using a local PKI workflow.
 
@@ -38,13 +38,13 @@ All certificate generation runs on the **Ansible control node**. Only the upload
 ## Installation
 
 Clone the repo to your control node.
-Build the itential-tls collection to create the tarball.
+Build the itential-pki collection to create the tarball.
 ```bash
 ansible-galaxy collection build
 ```
 Install the collection. Make sure your collections path is set appropriately.
 ```bash
-ansible-galaxy collection install itential-tls-<VERSION>.tar.gz
+ansible-galaxy collection install itential-pki-<VERSION>.tar.gz
 ```
 
 ---
@@ -53,12 +53,12 @@ ansible-galaxy collection install itential-tls-<VERSION>.tar.gz
 
 | Playbook | Runs On | Description |
 |---|---|---|
-| `itential.tls.gen_ca_cert` | Local | Generate a CA private key and self-signed CA certificate |
-| `itential.tls.gen_certs` | Local → Remote | Generate per-host key, CSR, and certificate signed by the CA |
-| `itential.tls.gen_multi_domain_cert` | Local | Generate a single multi-domain cert covering all inventory hosts |
-| `itential.tls.upload_ca_cert` | Remote | Upload the CA certificate to all target hosts |
-| `itential.tls.upload_certs` | Remote | Upload per-host key and certificate to each target host |
-| `itential.tls.upload_multi_domain_cert` | Remote | Upload the shared multi-domain key and certificate to all hosts |
+| `itential.pki.gen_ca_cert` | Local | Generate a CA private key and self-signed CA certificate |
+| `itential.pki.gen_certs` | Local → Remote | Generate per-host key, CSR, and certificate signed by the CA |
+| `itential.pki.gen_multi_domain_cert` | Local | Generate a single multi-domain cert covering all inventory hosts |
+| `itential.pki.upload_ca_cert` | Remote | Upload the CA certificate to all target hosts |
+| `itential.pki.upload_certs` | Remote | Upload per-host key and certificate to each target host |
+| `itential.pki.upload_multi_domain_cert` | Remote | Upload the shared multi-domain key and certificate to all hosts |
 
 ---
 
@@ -246,10 +246,10 @@ all:
 ```
 
 ```bash
-ansible-playbook itential.tls.gen_ca_cert     -i inventory.yml
-ansible-playbook itential.tls.gen_certs       -i inventory.yml
-ansible-playbook itential.tls.upload_ca_cert  -i inventory.yml
-ansible-playbook itential.tls.upload_certs    -i inventory.yml
+ansible-playbook itential.pki.gen_ca_cert     -i inventory.yml
+ansible-playbook itential.pki.gen_certs       -i inventory.yml
+ansible-playbook itential.pki.upload_ca_cert  -i inventory.yml
+ansible-playbook itential.pki.upload_certs    -i inventory.yml
 ```
 
 ---
@@ -326,16 +326,16 @@ A single cert valid for all hosts in the inventory — useful for shared service
 
 ```bash
 # 1. Generate the CA (once)
-ansible-playbook itential.tls.gen_ca_cert              -i inventory.yml
+ansible-playbook itential.pki.gen_ca_cert              -i inventory.yml
 
 # 2. Generate the multi-domain cert (covers all hosts)
-ansible-playbook itential.tls.gen_multi_domain_cert    -i inventory.yml
+ansible-playbook itential.pki.gen_multi_domain_cert    -i inventory.yml
 
 # 3. Upload CA cert to all hosts
-ansible-playbook itential.tls.upload_ca_cert           -i inventory.yml
+ansible-playbook itential.pki.upload_ca_cert           -i inventory.yml
 
 # 4. Upload the shared multi-domain cert to all hosts
-ansible-playbook itential.tls.upload_multi_domain_cert -i inventory.yml
+ansible-playbook itential.pki.upload_multi_domain_cert -i inventory.yml
 ```
 
 Override `tls_pki_md_cert_filename` to rename the shared cert files:

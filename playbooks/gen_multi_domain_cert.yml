@@ -12,5 +12,5 @@
   tasks:
     - name: Generate multi-domain cert for all hosts
       ansible.builtin.import_role:
-        name: itential.tls.tls
+        name: itential.pki.pki
         tasks_from: gen_multi_domain_cert
